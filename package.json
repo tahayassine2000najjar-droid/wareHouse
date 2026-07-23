@@ -4,13 +4,29 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "ts-node src/index.ts",
+    "dev": "ts-node src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "docker": "^1.0.0"
+    "mongoose": "^9.8.0",
+    "zod": "^4.4.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tahayassine2000najjar-droid/wareHouse.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tahayassine2000najjar-droid/wareHouse/issues"
+  },
+  "homepage": "https://github.com/tahayassine2000najjar-droid/wareHouse#readme",
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^7.0.2"
   }
 }
