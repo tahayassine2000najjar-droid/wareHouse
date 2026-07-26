@@ -12,7 +12,9 @@ export default function LoginForm() {
     email: "",
     password: "",
   });
-  const [errors, setErrors] = useState<Partial<Record<keyof LoginInput, string>>>({});
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof LoginInput, string>>
+  >({});
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -59,26 +61,20 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8">
-        <div>
-          <h1 className="text-center text-3xl font-bold tracking-tight text-gray-900">
-            WarehouseOS
-          </h1>
-          <h2 className="mt-2 text-center text-xl text-gray-600">
-            Sign in to your account
-          </h2>
-        </div>
+    <div className="auth-background">
+      <div className="auth-card">
+        <h1 className="auth-logo">WarehouseOS</h1>
+        <p className="auth-subtitle">Sign in to your account</p>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+        <form onSubmit={handleSubmit} style={{ marginTop: "1.75rem" }}>
           {serverError && (
-            <div className="rounded-md bg-red-50 p-4 text-sm text-red-700">
-              {serverError}
+            <div className="alert alert-error" style={{ marginBottom: "1.25rem" }}>
+              <span>{serverError}</span>
             </div>
           )}
 
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          <div className="form-group">
+            <label htmlFor="email" className="form-label">
               Email address
             </label>
             <input
@@ -88,14 +84,14 @@ export default function LoginForm() {
               autoComplete="email"
               value={formData.email}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className={`form-input ${errors.email ? "error" : ""}`}
               placeholder="you@example.com"
             />
-            {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
+            {errors.email && <p className="form-error">{errors.email}</p>}
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+          <div className="form-group">
+            <label htmlFor="password" className="form-label">
               Password
             </label>
             <input
@@ -105,25 +101,27 @@ export default function LoginForm() {
               autoComplete="current-password"
               value={formData.password}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className={`form-input ${errors.password ? "error" : ""}`}
               placeholder="Your password"
             />
-            {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
+            {errors.password && (
+              <p className="form-error">{errors.password}</p>
+            )}
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+            className="btn btn-primary btn-full"
+            style={{ marginTop: "0.5rem" }}
           >
+            {loading && <span className="spinner" />}
             {loading ? "Signing in..." : "Sign in"}
           </button>
 
-          <p className="text-center text-sm text-gray-600">
+          <p className="auth-link" style={{ marginTop: "1.25rem" }}>
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
-              Create one
-            </Link>
+            <Link href="/register">Create one</Link>
           </p>
         </form>
       </div>

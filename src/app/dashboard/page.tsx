@@ -1,10 +1,8 @@
 "use client";
 
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
@@ -18,15 +16,16 @@ export default function DashboardPage() {
 
   if (status === "loading") {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p className="text-gray-500">Loading...</p>
+      <div className="flex min-h-[50vh] items-center justify-center">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-primary-200 border-t-primary-600" />
+          <p className="text-sm text-surface-500">Loading...</p>
+        </div>
       </div>
     );
   }
 
-  if (!session) {
-    return null;
-  }
+  if (!session) return null;
 
   const loginDate = new Date().toLocaleDateString("en-US", {
     year: "numeric",
@@ -37,37 +36,49 @@ export default function DashboardPage() {
   });
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <Header />
-      <main className="flex-1 bg-gray-50">
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <div className="rounded-lg bg-white p-6 shadow sm:p-8">
-            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+    <div className="dashboard-container">
+      <div className="dash-card">
+        <div className="dash-card-header">
+          <div>
+            <h1 className="dash-welcome">
               Welcome, {session.user.name}!
             </h1>
-            <div className="mt-6 space-y-4">
-              <div className="rounded-md bg-indigo-50 p-4">
-                <p className="text-sm text-gray-700">
-                  <span className="font-semibold">Name:</span> {session.user.name}
-                </p>
-                <p className="text-sm text-gray-700">
-                  <span className="font-semibold">Email:</span> {session.user.email}
-                </p>
-                <p className="text-sm text-gray-700">
-                  <span className="font-semibold">Login date:</span> {loginDate}
-                </p>
-              </div>
-              <button
-                onClick={() => signOut({ callbackUrl: "/login" })}
-                className="rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-              >
-                Logout
-              </button>
+            <p className="dash-date">{loginDate}</p>
+          </div>
+        </div>
+
+        <div className="welcome-banner">
+          <h2>WarehouseOS Dashboard</h2>
+          <p>
+            Manage your products, categories and stock. Everything is ready for
+            the next sprint.
+          </p>
+        </div>
+
+        <div className="info-grid">
+          <div className="info-item">
+            <div className="info-icon user">&#9786;</div>
+            <div>
+              <p className="info-label">Full Name</p>
+              <p className="info-value">{session.user.name}</p>
+            </div>
+          </div>
+          <div className="info-item">
+            <div className="info-icon email">&#9993;</div>
+            <div>
+              <p className="info-label">Email</p>
+              <p className="info-value">{session.user.email}</p>
+            </div>
+          </div>
+          <div className="info-item">
+            <div className="info-icon calendar">&#9719;</div>
+            <div>
+              <p className="info-label">Login Date</p>
+              <p className="info-value">{loginDate}</p>
             </div>
           </div>
         </div>
-      </main>
-      <Footer />
+      </div>
     </div>
   );
 }
