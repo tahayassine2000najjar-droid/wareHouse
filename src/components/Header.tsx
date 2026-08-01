@@ -17,6 +17,12 @@ export default function Header() {
             <Link href="/dashboard" className="header-nav-link">
               Dashboard
             </Link>
+            <Link href="/products" className="header-nav-link">
+              Products
+            </Link>
+            <Link href="/categories" className="header-nav-link">
+              Categories
+            </Link>
           </nav>
         </div>
 

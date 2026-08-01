@@ -35,3 +35,36 @@ export const loginSchema = z.object({
 });
 
 export type LoginInput = z.infer<typeof loginSchema>;
+
+export const categorySchema = z.object({
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .max(100, "Name must be at most 100 characters"),
+  description: z
+    .string()
+    .max(500, "Description must be at most 500 characters")
+    .optional(),
+});
+
+export type CategoryInput = z.infer<typeof categorySchema>;
+
+export const productSchema = z.object({
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .max(100, "Name must be at most 100 characters"),
+  sku: z
+    .string()
+    .min(1, "SKU is required")
+    .max(50, "SKU must be at most 50 characters"),
+  categoryId: z.string().min(1, "Category is required"),
+  price: z.number().min(0, "Price cannot be negative"),
+  quantity: z
+    .number()
+    .int("Quantity must be an integer")
+    .min(0, "Quantity cannot be negative"),
+  archived: z.boolean().optional(),
+});
+
+export type ProductInput = z.infer<typeof productSchema>;
