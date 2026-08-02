@@ -59,6 +59,10 @@ export const productSchema = z.object({
     .min(1, "SKU is required")
     .max(50, "SKU must be at most 50 characters"),
   categoryId: z.string().min(1, "Category is required"),
+  description: z
+    .string()
+    .max(500, "Description must be at most 500 characters")
+    .optional(),
   price: z.number().min(0, "Price cannot be negative"),
   quantity: z
     .number()

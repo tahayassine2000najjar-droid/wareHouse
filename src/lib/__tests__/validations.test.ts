@@ -1,8 +1,10 @@
 import {
   registerSchema,
   loginSchema,
+  productSchema,
   RegisterInput,
   LoginInput,
+  ProductInput,
 } from "../validations";
 
 describe("registerSchema", () => {
@@ -131,6 +133,92 @@ describe("loginSchema", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.error.flatten().fieldErrors.password).toBeDefined();
+    }
+  });
+});
+
+describe("productSchema", () => {
+  const validData: ProductInput = {
+    name: "Wireless Mouse",
+    sku: "SKU-001",
+    categoryId: "64b7f9c2e4b0f1a2b3c4d5e6",
+    description: "Ergonomic wireless mouse",
+    price: 29.99,
+    quantity: 10,
+  };
+
+  it("accepts valid data", () => {
+    const result = productSchema.safeParse(validData);
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts data without a description", () => {
+    const { description, ...dataWithoutDescription } = validData;
+    const result = productSchema.safeParse(dataWithoutDescription);
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts archived flag", () => {
+    const result = productSchema.safeParse({ ...validData, archived: true });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects empty name", () => {
+    const result = productSchema.safeParse({ ...validData, name: "" });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.name).toBeDefined();
+    }
+  });
+
+  it("rejects empty sku", () => {
+    const result = productSchema.safeParse({ ...validData, sku: "" });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.sku).toBeDefined();
+    }
+  });
+
+  it("rejects empty categoryId", () => {
+    const result = productSchema.safeParse({ ...validData, categoryId: "" });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.categoryId).toBeDefined();
+    }
+  });
+
+  it("rejects description longer than 500 characters", () => {
+    const result = productSchema.safeParse({
+      ...validData,
+      description: "a".repeat(501),
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.description).toBeDefined();
+    }
+  });
+
+  it("rejects negative price", () => {
+    const result = productSchema.safeParse({ ...validData, price: -5 });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.price).toBeDefined();
+    }
+  });
+
+  it("rejects negative quantity", () => {
+    const result = productSchema.safeParse({ ...validData, quantity: -1 });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.quantity).toBeDefined();
+    }
+  });
+
+  it("rejects non-integer quantity", () => {
+    const result = productSchema.safeParse({ ...validData, quantity: 2.5 });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.quantity).toBeDefined();
     }
   });
 });

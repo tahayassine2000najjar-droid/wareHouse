@@ -8,7 +8,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductForm from "@/components/ProductForm";
 
-export default function NewProductPage() {
+export default function CreateProductPage() {
   const { status } = useSession();
   const router = useRouter();
 

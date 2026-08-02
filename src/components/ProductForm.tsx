@@ -13,6 +13,7 @@ interface ProductFormData {
   name: string;
   sku: string;
   categoryId: string;
+  description: string;
   price: string;
   quantity: string;
 }
@@ -23,6 +24,7 @@ interface ProductFormProps {
     name: string;
     sku: string;
     category: { _id: string; name: string } | string | null;
+    description?: string;
     price: number;
     quantity: number;
   };
@@ -41,6 +43,7 @@ export default function ProductForm({
       (typeof initialData?.category === "object" && initialData?.category?._id) ||
       (typeof initialData?.category === "string" ? initialData.category : "") ||
       "",
+    description: initialData?.description ?? "",
     price: initialData?.price != null ? String(initialData.price) : "",
     quantity: initialData?.quantity != null ? String(initialData.quantity) : "",
   });
@@ -67,7 +70,7 @@ export default function ProductForm({
   }, []);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setErrors({ ...errors, [e.target.name]: "" });
@@ -82,6 +85,7 @@ export default function ProductForm({
       name: formData.name,
       sku: formData.sku,
       categoryId: formData.categoryId,
+      description: formData.description || undefined,
       price: formData.price === "" ? undefined : Number(formData.price),
       quantity:
         formData.quantity === "" ? undefined : Number(formData.quantity),
@@ -108,6 +112,7 @@ export default function ProductForm({
             name: fieldErrors.name?.[0] || "",
             sku: fieldErrors.sku?.[0] || "",
             categoryId: fieldErrors.categoryId?.[0] || "",
+            description: fieldErrors.description?.[0] || "",
             price: fieldErrors.price?.[0] || "",
             quantity: fieldErrors.quantity?.[0] || "",
           });
@@ -117,7 +122,11 @@ export default function ProductForm({
         return;
       }
 
-      router.push(`/products/${data._id}`);
+      if (productId) {
+        router.push(`/products/${data._id}`);
+      } else {
+        router.push("/products");
+      }
       router.refresh();
     } catch {
       setServerError("An unexpected error occurred");
@@ -198,6 +207,27 @@ export default function ProductForm({
             </Link>
             .
           </p>
+        )}
+      </div>
+
+      <div>
+        <label
+          htmlFor="description"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Description
+        </label>
+        <textarea
+          id="description"
+          name="description"
+          rows={3}
+          value={formData.description}
+          onChange={handleChange}
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          placeholder="Short description of the product"
+        />
+        {errors.description && (
+          <p className="mt-1 text-sm text-red-600">{errors.description}</p>
         )}
       </div>
 

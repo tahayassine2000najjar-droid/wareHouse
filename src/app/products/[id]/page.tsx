@@ -12,6 +12,7 @@ interface Product {
   name: string;
   sku: string;
   category: { _id: string; name: string; description?: string } | null;
+  description?: string;
   price: number;
   quantity: number;
   archived: boolean;
@@ -165,6 +166,14 @@ export default function ProductDetailPage() {
                     <dt className="text-sm font-medium text-gray-500">SKU</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                       {product.sku}
+                    </dd>
+                  </div>
+                  <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                    <dt className="text-sm font-medium text-gray-500">
+                      Description
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                      {product.description || "—"}
                     </dd>
                   </div>
                   <div className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">

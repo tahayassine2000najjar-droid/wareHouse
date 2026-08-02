@@ -13,6 +13,7 @@ interface Product {
   name: string;
   sku: string;
   category: { _id: string; name: string } | null;
+  description?: string;
   price: number;
   quantity: number;
 }

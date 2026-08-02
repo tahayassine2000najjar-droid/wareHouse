@@ -4,6 +4,7 @@ export interface IProduct extends Document {
   name: string;
   sku: string;
   category: Types.ObjectId;
+  description?: string;
   price: number;
   quantity: number;
   archived: boolean;
@@ -29,6 +30,11 @@ const ProductSchema = new Schema<IProduct>(
       type: Schema.Types.ObjectId,
       ref: "Category",
       required: [true, "Category is required"],
+    },
+    description: {
+      type: String,
+      trim: true,
+      maxlength: [500, "Description must be at most 500 characters"],
     },
     price: {
       type: Number,
