@@ -3,8 +3,10 @@ import {
   loginSchema,
   categorySchema,
   productSchema,
+  stockMovementSchema,
   CategoryInput,
   ProductInput,
+  StockMovementInput,
   RegisterInput,
   LoginInput,
 } from "../validations";
@@ -184,6 +186,88 @@ describe("categorySchema", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.error.flatten().fieldErrors.description).toBeDefined();
+    }
+  });
+});
+
+describe("stockMovementSchema", () => {
+  const validData: StockMovementInput = {
+    productId: "64b7f9c2e4b0f1a2b3c4d5e6",
+    type: "entry",
+    quantity: 10,
+    note: "Restock from supplier",
+  };
+
+  it("accepts valid entry data", () => {
+    const result = stockMovementSchema.safeParse(validData);
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts a valid exit", () => {
+    const result = stockMovementSchema.safeParse({
+      ...validData,
+      type: "exit",
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts data without a note", () => {
+    const { note, ...dataWithoutNote } = validData;
+    const result = stockMovementSchema.safeParse(dataWithoutNote);
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects empty productId", () => {
+    const result = stockMovementSchema.safeParse({ ...validData, productId: "" });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.productId).toBeDefined();
+    }
+  });
+
+  it("rejects an invalid type", () => {
+    const result = stockMovementSchema.safeParse({
+      ...validData,
+      type: "transfer",
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.type).toBeDefined();
+    }
+  });
+
+  it("rejects a zero quantity", () => {
+    const result = stockMovementSchema.safeParse({ ...validData, quantity: 0 });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.quantity).toBeDefined();
+    }
+  });
+
+  it("rejects a negative quantity", () => {
+    const result = stockMovementSchema.safeParse({ ...validData, quantity: -5 });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.quantity).toBeDefined();
+    }
+  });
+
+  it("rejects a non-integer quantity", () => {
+    const result = stockMovementSchema.safeParse({ ...validData, quantity: 2.5 });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.quantity).toBeDefined();
+    }
+  });
+
+  it("rejects a note longer than 500 characters", () => {
+    const result = stockMovementSchema.safeParse({
+      ...validData,
+      note: "a".repeat(501),
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.note).toBeDefined();
     }
   });
 });

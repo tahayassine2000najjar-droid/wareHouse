@@ -23,6 +23,9 @@ export default function Header() {
             <Link href="/categories" className="header-nav-link">
               Categories
             </Link>
+            <Link href="/movements" className="header-nav-link">
+              Movements
+            </Link>
           </nav>
         </div>
 

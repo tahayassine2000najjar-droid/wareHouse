@@ -73,3 +73,20 @@ export const productSchema = z.object({
 });
 
 export type ProductInput = z.infer<typeof productSchema>;
+
+export const stockMovementSchema = z.object({
+  productId: z.string().min(1, "Product is required"),
+  type: z.enum(["entry", "exit"], {
+    message: "Type must be 'entry' or 'exit'",
+  }),
+  quantity: z
+    .number()
+    .int("Quantity must be an integer")
+    .positive("Quantity must be greater than zero"),
+  note: z
+    .string()
+    .max(500, "Note must be at most 500 characters")
+    .optional(),
+});
+
+export type StockMovementInput = z.infer<typeof stockMovementSchema>;

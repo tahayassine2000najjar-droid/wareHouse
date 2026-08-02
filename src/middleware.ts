@@ -9,7 +9,8 @@ export async function middleware(request: NextRequest) {
   if (
     pathname.startsWith("/dashboard") ||
     pathname.startsWith("/products") ||
-    pathname.startsWith("/categories")
+    pathname.startsWith("/categories") ||
+    pathname.startsWith("/movements")
   ) {
     if (!token) {
       const loginUrl = new URL("/login", request.url);
@@ -32,6 +33,7 @@ export const config = {
     "/dashboard/:path*",
     "/products/:path*",
     "/categories/:path*",
+    "/movements/:path*",
     "/login",
     "/register",
   ],
