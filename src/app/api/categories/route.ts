@@ -3,10 +3,19 @@ import { connectToDatabase } from "@/lib/mongodb";
 import Category from "@/models/Category";
 import { categorySchema } from "@/lib/validations";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
+    const archived = searchParams.get("archived");
+    const filter =
+      archived === "true"
+        ? { archived: true }
+        : archived === "all"
+          ? {}
+          : { archived: false };
+
     await connectToDatabase();
-    const categories = await Category.find().sort({ name: 1 }).lean();
+    const categories = await Category.find(filter).sort({ name: 1 }).lean();
     return NextResponse.json(categories);
   } catch {
     return NextResponse.json(

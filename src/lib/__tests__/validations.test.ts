@@ -1,10 +1,12 @@
 import {
   registerSchema,
   loginSchema,
+  categorySchema,
   productSchema,
+  CategoryInput,
+  ProductInput,
   RegisterInput,
   LoginInput,
-  ProductInput,
 } from "../validations";
 
 describe("registerSchema", () => {
@@ -133,6 +135,55 @@ describe("loginSchema", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.error.flatten().fieldErrors.password).toBeDefined();
+    }
+  });
+});
+
+describe("categorySchema", () => {
+  const validData: CategoryInput = {
+    name: "Electronics",
+    description: "Devices and accessories",
+  };
+
+  it("accepts valid data", () => {
+    const result = categorySchema.safeParse(validData);
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts data without a description", () => {
+    const result = categorySchema.safeParse({ name: "Electronics" });
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts archived flag", () => {
+    const result = categorySchema.safeParse({ name: "Electronics", archived: true });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects empty name", () => {
+    const result = categorySchema.safeParse({ name: "" });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.name).toBeDefined();
+    }
+  });
+
+  it("rejects name longer than 100 characters", () => {
+    const result = categorySchema.safeParse({ name: "a".repeat(101) });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.name).toBeDefined();
+    }
+  });
+
+  it("rejects description longer than 500 characters", () => {
+    const result = categorySchema.safeParse({
+      name: "Electronics",
+      description: "a".repeat(501),
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.description).toBeDefined();
     }
   });
 });

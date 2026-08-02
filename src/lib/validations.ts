@@ -45,6 +45,7 @@ export const categorySchema = z.object({
     .string()
     .max(500, "Description must be at most 500 characters")
     .optional(),
+  archived: z.boolean().optional(),
 });
 
 export type CategoryInput = z.infer<typeof categorySchema>;

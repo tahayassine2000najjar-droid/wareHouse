@@ -3,6 +3,7 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 export interface ICategory extends Document {
   name: string;
   description?: string;
+  archived: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -18,6 +19,10 @@ const CategorySchema = new Schema<ICategory>(
     description: {
       type: String,
       trim: true,
+    },
+    archived: {
+      type: Boolean,
+      default: false,
     },
   },
   {
