@@ -1,0 +1,37 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: warehouse-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: warehouse
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        MONGODB_URI: mongodb://mongodb:27017/warehouse
+    container_name: warehouse-app
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/warehouse
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: change-me-in-production
+
+volumes:
+  mongodb_data:

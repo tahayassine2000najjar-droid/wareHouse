@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+.gitignore
+coverage
+*.log
+.env
+.env*.local
+docker-compose.yml
+Dockerfile
+README.md
