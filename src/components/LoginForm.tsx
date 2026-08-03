@@ -85,7 +85,7 @@ export default function LoginForm() {
               value={formData.email}
               onChange={handleChange}
               className={`form-input ${errors.email ? "error" : ""}`}
-              placeholder="you@example.com"
+              placeholder="taha@gmail.com"
             />
             {errors.email && <p className="form-error">{errors.email}</p>}
           </div>

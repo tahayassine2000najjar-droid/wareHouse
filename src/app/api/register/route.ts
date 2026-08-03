@@ -8,7 +8,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const result = registerSchema.safeParse(body);
+    const result = registerSchema.omit({ confirmPassword: true }).safeParse(body);
     if (!result.success) {
       const errors = result.error.flatten().fieldErrors;
       const firstError =

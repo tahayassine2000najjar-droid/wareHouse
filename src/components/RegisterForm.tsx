@@ -94,7 +94,7 @@ export default function RegisterForm() {
               value={formData.name}
               onChange={handleChange}
               className={`form-input ${errors.name ? "error" : ""}`}
-              placeholder="John Doe"
+              placeholder="Taha"
             />
             {errors.name && <p className="form-error">{errors.name}</p>}
           </div>
@@ -111,7 +111,7 @@ export default function RegisterForm() {
               value={formData.email}
               onChange={handleChange}
               className={`form-input ${errors.email ? "error" : ""}`}
-              placeholder="you@example.com"
+              placeholder="taha@gmail.com"
             />
             {errors.email && <p className="form-error">{errors.email}</p>}
           </div>
